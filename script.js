@@ -92,23 +92,17 @@ class WeatherDashboard {
   async fetchWeatherByCoords(lat, lon) {
     try {
       const currentResponse = await fetch(
-        `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${this.API_KEY}&units=metric`
+        `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${this.API_KEY}&units=metric`
       );
 
       if (!currentResponse.ok) {
-        const errorText = await currentResponse.text();
-        throw new Error(`Unable to fetch weather data: ${errorText}`);
+        throw new Error("Unable to fetch weather data");
       }
 
       const currentData = await currentResponse.json();
       const forecastResponse = await fetch(
-        `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${this.API_KEY}&units=metric`
+        `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${this.API_KEY}&units=metric`
       );
-
-      if (!forecastResponse.ok) {
-        const errorText = await forecastResponse.text();
-        throw new Error(`Unable to fetch forecast data: ${errorText}`);
-      }
 
       const forecastData = await forecastResponse.json();
       const weather = this.processWeatherData(currentData, forecastData);
@@ -116,8 +110,10 @@ class WeatherDashboard {
       // Check if user's location is already in saved cities
       const existingCity = this.weatherData.find((w) => w.id === weather.id);
       if (!existingCity) {
+        weather.isCurrentLocation = true;
         this.weatherData.unshift(weather);
         this.saveToStorage();
+        this.renderWeatherCards();
       }
 
       this.hideError();
@@ -126,6 +122,7 @@ class WeatherDashboard {
       this.showError("Failed to fetch weather data for your location");
     }
   }
+
   async fetchWeatherData(city) {
     try {
       const currentResponse = await fetch(
@@ -338,19 +335,25 @@ class WeatherDashboard {
     card.innerHTML = `
             <div class="card-header">
                 <div class="city-info">
-                    <h3>${weather.name}</h3>
+                    <h3>${weather.name} ${
+      weather.isCurrentLocation
+        ? '<span class="current-location-badge">📍 Current Location</span>'
+        : ""
+    }</h3>
                     <p>${weather.country}</p>
                 </div>
                 <div class="card-actions">
                     ${this.getWeatherIcon(weather.current.weather.icon)}
-                    <button class="remove-btn" onclick="dashboard.removeCity(${
-                      weather.id
-                    })">
+                    ${
+                      !weather.isCurrentLocation
+                        ? `<button class="remove-btn" onclick="dashboard.removeCity(${weather.id})">
                         <svg class="remove-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M18 6 6 18"/>
                             <path d="m6 6 12 12"/>
                         </svg>
-                    </button>
+                    </button>`
+                        : ""
+                    }
                 </div>
             </div>
             
