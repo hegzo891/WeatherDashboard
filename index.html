@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Real-Time Weather Dashboard</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <div class="logo">
+          <svg
+            class="logo-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />
+          </svg>
+        </div>
+        <h1 class="title">Weather Dashboard</h1>
+        <p class="subtitle">Real-time weather data for your favorite cities</p>
+      </header>
+
+      <div class="search-container">
+        <form id="search-form" class="search-form">
+          <div class="input-group">
+            <div class="input-wrapper">
+              <svg
+                class="input-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.35-4.35" />
+              </svg>
+              <input
+                type="text"
+                id="city-input"
+                placeholder="Enter city name..."
+                required
+              />
+            </div>
+            <div class="input-wrapper country-input">
+              <svg
+                class="input-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              <input
+                type="text"
+                id="country-input"
+                placeholder="Country (optional)"
+                maxlength="2"
+              />
+            </div>
+          </div>
+          <button type="submit" id="add-city-btn" class="add-city-btn">
+            <svg
+              class="btn-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M5 12h14" />
+              <path d="M12 5v14" />
+            </svg>
+            Add City
+          </button>
+          <div class="search-help">
+            <p>
+              Enter city name and optionally specify country code (e.g., "US",
+              "GB", "DE") for more precise results
+            </p>
+          </div>
+        </form>
+      </div>
+
+      <div id="error-message" class="error-message hidden">
+        <div class="error-content">
+          <svg
+            class="error-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M18 6 6 18" />
+            <path d="m6 6 12 12" />
+          </svg>
+          <span class="error-text">Error:</span>
+          <span id="error-text"></span>
+        </div>
+      </div>
+
+      <div id="loading-message" class="loading-message hidden">
+        <div class="loading-content">
+          <svg
+            class="loading-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+            <circle cx="12" cy="10" r="3" />
+          </svg>
+          <span>Detecting your location...</span>
+        </div>
+      </div>
+
+      <div id="weather-grid" class="weather-grid"></div>
+
+      <div id="empty-state" class="empty-state hidden">
+        <div class="empty-content">
+          <svg
+            class="empty-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />
+          </svg>
+          <h3>No cities added yet</h3>
+          <p>
+            Search for a city above to see its weather information and start
+            building your dashboard
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
